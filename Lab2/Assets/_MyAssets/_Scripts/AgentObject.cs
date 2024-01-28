@@ -13,9 +13,10 @@ public class AgentObject : MonoBehaviour
         set { m_target.position = value;}
     }
 
-    void Start()
+    
+    protected void Start()
     {
-        Debug.Log("Starting agent...");
+        Debug.Log("Starting agent");
         TargetPosition = m_target.position;
     }
 }
