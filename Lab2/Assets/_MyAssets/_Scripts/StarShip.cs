@@ -68,7 +68,7 @@ public class StarShip : AgentObject
         rb.velocity = transform.up * movementspeed;
 
     }
-    public void ResetStarShip()
+    public void Restart()
     {
         SceneLoader.LoadSceneByIndex(0);
     }
@@ -77,8 +77,7 @@ public class StarShip : AgentObject
     {
         if (collision.gameObject.CompareTag("Planet"))
         {
-
-            ResetStarShip();
+            Restart();
         }
     }
 }
