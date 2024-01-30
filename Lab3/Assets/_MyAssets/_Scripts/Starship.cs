@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Starship : AgentObject
 {
     [SerializeField] float movementSpeed;
     [SerializeField] float rotationSpeed;
+
+    [SerializeField] float whiskerLength, whiskerAngle, avoidanceWeight;
     // Add fields for whisper length, angle and avoidance weight.
     //
     //
@@ -28,45 +31,52 @@ public class Starship : AgentObject
             SeekForward();
             // Add call to AvoidObstacles.
             //
+            AvoidObstacles();
         }
     }
 
     private void AvoidObstacles()
     {
         // Cast whiskers to detect obstacles.
-        //
+        bool hitLeft = CastWiskers(whiskerAngle,Color.red);
+        bool hitRight = CastWiskers(-whiskerAngle,Color.blue);
         //
 
         // Adjust rotation based on detected obstacles.
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
+        if(hitLeft)
+        {
+            RotateClockwise();
+        }
+        else if(hitRight && !hitLeft)
+        {
+            RotateCounterClockwise();
+        }
     }
-
-    private void RotateCounterClockwise()
-    {
-        // Rotate counterclockwise based on rotationSpeed and a weight.
-        // 
-    }
-
     private void RotateClockwise()
     {
-        // Rotate clockwise based on rotationSpeed and a weight.
-        // 
+        transform.Rotate(Vector3.forward, -rotationSpeed * avoidanceWeight * Time.deltaTime);
+    }
+    private void RotateCounterClockwise()
+    {
+        transform.Rotate(Vector3.forward, rotationSpeed * avoidanceWeight * Time.deltaTime);
     }
 
-    // Add CastWhisker method. I removed it entirely.
-    //
-    //
-    //
-    //
+    private bool CastWiskers(float angle, Color color)
+    {
+        bool hitResult = false;
+        Color rayColor = color;
+        Vector2 whiskerDirection = Quaternion.Euler(0,0,angle) * transform.up;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, whiskerDirection, whiskerLength);
+
+        if (hit.collider != null)
+        {
+            Debug.Log("Obstacle detected!");
+            rayColor = Color.green;
+            hitResult = true;
+        }
+        Debug.DrawRay(transform.position, whiskerDirection * whiskerLength, rayColor);
+        return hitResult;
+    }
 
     private void SeekForward() // A seek with rotation to target but only moving along forward vector.
     {

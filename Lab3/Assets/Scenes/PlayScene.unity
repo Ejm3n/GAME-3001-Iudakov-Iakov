@@ -579,6 +579,9 @@ MonoBehaviour:
   m_target: {fileID: 1011901755}
   movementSpeed: 3
   rotationSpeed: 60
+  whiskerLength: 3
+  whiskerAngle: 45
+  avoidanceWeight: 5
 --- !u!4 &1557970008
 Transform:
   m_ObjectHideFlags: 0
