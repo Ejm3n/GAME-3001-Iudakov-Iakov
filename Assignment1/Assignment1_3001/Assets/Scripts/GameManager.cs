@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     {ActorState.Fleeing,new PresetPositions(new Vector2(0,0f),new Vector2(0,2),false) },
     {ActorState.Avoidance,new PresetPositions(new Vector2(-8,3f),new Vector2(9,0),true) }};
     private ActorMovement actorMovement;
+    private Quaternion actorRotation;
     private void Awake()
     {
         if(Instance==null)
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
         else
             Destroy(this);
         actorMovement = Actor.GetComponent<ActorMovement>();
+        actorRotation = Actor.transform.rotation;
     }
     private void Update()
     {
@@ -63,13 +65,15 @@ public class GameManager : MonoBehaviour
     }
     private void CreateScene(ActorState actorState)
     {
-        actorMovement.UpdateActor(actorState,Target.transform);
-        Actor.transform.position = actorPresets[actorState].ActorPosition;
-        Actor.transform.Rotate(0, 0, 0);
-        Actor.SetActive(true);
+        Obstacle.SetActive(actorPresets[actorState].Obstacle);
         Target.transform.position = actorPresets[actorState].TargetPosition;
         Target.SetActive(true);
-        Obstacle.SetActive(actorPresets[actorState].Obstacle);
+        Actor.SetActive(true);
+        actorMovement.UpdateActor(actorState, Target.transform);
+        Actor.transform.position = actorPresets[actorState].ActorPosition;
+        Actor.transform.rotation = actorRotation;
+        
+     
         SoundManager.Instance.PlaySound("OnClick");
         SoundManager.Instance.PlaySound("EngineStart");
     }
