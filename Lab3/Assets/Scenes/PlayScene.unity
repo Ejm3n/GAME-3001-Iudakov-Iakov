@@ -581,6 +581,7 @@ MonoBehaviour:
   rotationSpeed: 60
   whiskerLength: 3
   whiskerAngle: 45
+  whiskerAngle1: 90
   avoidanceWeight: 5
 --- !u!4 &1557970008
 Transform:

@@ -9,7 +9,7 @@ public class Starship : AgentObject
     [SerializeField] float movementSpeed;
     [SerializeField] float rotationSpeed;
 
-    [SerializeField] float whiskerLength, whiskerAngle, avoidanceWeight;
+    [SerializeField] float whiskerLength, whiskerAngle,whiskerAngle1, avoidanceWeight;
     // Add fields for whisper length, angle and avoidance weight.
     //
     //
@@ -38,16 +38,18 @@ public class Starship : AgentObject
     private void AvoidObstacles()
     {
         // Cast whiskers to detect obstacles.
-        bool hitLeft = CastWiskers(whiskerAngle,Color.red);
-        bool hitRight = CastWiskers(-whiskerAngle,Color.blue);
+        bool hitLeft = CastWiskers(whiskerAngle,Color.red, whiskerLength);
+        bool hitRight = CastWiskers(-whiskerAngle,Color.blue, whiskerLength);
+        bool hitBackLeft = CastWiskers( whiskerAngle1, Color.cyan, whiskerLength/2);
+        bool hitBackRight = CastWiskers(-whiskerAngle1, Color.green, whiskerLength/2);
         //
 
         // Adjust rotation based on detected obstacles.
-        if(hitLeft)
+        if(hitLeft || (hitBackRight && !hitRight) )
         {
             RotateClockwise();
         }
-        else if(hitRight && !hitLeft)
+        else if(hitRight || (hitBackLeft && hitLeft) )
         {
             RotateCounterClockwise();
         }
@@ -61,7 +63,7 @@ public class Starship : AgentObject
         transform.Rotate(Vector3.forward, rotationSpeed * avoidanceWeight * Time.deltaTime);
     }
 
-    private bool CastWiskers(float angle, Color color)
+    private bool CastWiskers(float angle, Color color, float whiskerLength)
     {
         bool hitResult = false;
         Color rayColor = color;
