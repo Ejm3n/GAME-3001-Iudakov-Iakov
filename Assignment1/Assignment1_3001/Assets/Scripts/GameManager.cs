@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
     }
     private void CreateScene(ActorState actorState)
     {
+        actorMovement.UpdateActor(actorState,Target.transform);
         Actor.transform.position = actorPresets[actorState].ActorPosition;
         Actor.transform.Rotate(0, 0, 0);
         Actor.SetActive(true);
