@@ -44,11 +44,14 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
+            
             CreateScene(ActorState.Seeking);
         }
         else if(Input.GetKeyDown(KeyCode.Alpha2))
         {
+            Target.layer = 0;
             CreateScene(ActorState.Fleeing);
+
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
@@ -56,6 +59,7 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
+            Target.layer = 2;
             CreateScene(ActorState.Avoidance);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
