@@ -45,13 +45,22 @@ public class Starship : AgentObject
         //
 
         // Adjust rotation based on detected obstacles.
-        if(hitLeft || (hitBackRight && !hitRight) )
+        if(hitLeft && !hitRight)
         {
             RotateClockwise();
         }
-        else if(hitRight || (hitBackLeft && hitLeft) )
+        else if(hitRight && !hitLeft )
         {
             RotateCounterClockwise();
+        }
+        else if  (hitBackLeft && !hitLeft && !hitRight)
+        {
+            RotateClockwise();
+        }
+        else if  (hitBackRight && !hitRight && !hitLeft)
+        {
+            RotateCounterClockwise();
+           
         }
     }
     private void RotateClockwise()
