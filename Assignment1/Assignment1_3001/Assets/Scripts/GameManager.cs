@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
         Target.SetActive(true);
         Obstacle.SetActive(actorPresets[actorState].Obstacle);
         SoundManager.Instance.PlaySound("OnClick");
+        SoundManager.Instance.PlaySound("EngineStart");
     }
     private void ResetScene()
     {

@@ -48,10 +48,7 @@ public class ActorMovement : MonoBehaviour
                 break;
         }
     }
-    private void OnEnable()
-    {
-        SoundManager.Instance.PlaySound("EngineStart");
-    }
+    
     public void UpdateActor(ActorState state, Transform targetPosition)
     {
         this.state = state;
