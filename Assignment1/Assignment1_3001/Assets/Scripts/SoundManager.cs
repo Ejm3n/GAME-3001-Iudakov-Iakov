@@ -58,7 +58,8 @@ public class SoundManager : MonoBehaviour
         foreach (AudioTrack track in audioTracks)
         {
             AddSound(track.Name, track.Clip, track.Type);       
-        }      
+        }
+        PlayMusic("BackgroundMusic");
     }
 
     // Add a sound to the dictionary.
