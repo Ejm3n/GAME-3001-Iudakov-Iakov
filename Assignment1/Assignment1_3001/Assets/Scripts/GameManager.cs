@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     Dictionary<ActorState, PresetPositions> actorPresets = new Dictionary<ActorState, PresetPositions> {
     {ActorState.Seeking,new PresetPositions(new Vector2(-9,-3.5f),new Vector2(9,3),false) },
     {ActorState.Arrival,new PresetPositions(new Vector2(-5,-0.5f),new Vector2(9,2),false) },
-    {ActorState.Fleeing,new PresetPositions(new Vector2(0,0f),new Vector2(0,2),false) },
+    {ActorState.Fleeing,new PresetPositions(new Vector2(0,0f),new Vector2(-1,2),false) },
     {ActorState.Avoidance,new PresetPositions(new Vector2(-8,3f),new Vector2(9,0),true) }};
     private ActorMovement actorMovement;
     private Quaternion actorRotation;
