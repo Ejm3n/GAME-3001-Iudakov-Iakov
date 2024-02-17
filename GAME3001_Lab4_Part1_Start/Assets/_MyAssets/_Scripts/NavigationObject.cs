@@ -20,6 +20,6 @@ public class NavigationObject : MonoBehaviour
         float originalX = Mathf.Floor(transform.position.x) + .5f;
         gridIndex.x = ((int)Mathf.Floor(originalX + 7.5f) / 15 * 15);
         float originalY = Mathf.Floor(transform.position.y) + .5f;
-        gridIndex.x = ((int)Mathf.Floor(originalY + 5.5f));
+        gridIndex.y = 11 - ((int)Mathf.Floor(originalY + 5.5f));
     }
 }
