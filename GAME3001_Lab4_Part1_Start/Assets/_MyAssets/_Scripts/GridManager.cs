@@ -99,11 +99,11 @@ public class GridManager : MonoBehaviour
                 GameObject tileInst = GameObject.Instantiate(tilePrefab,new Vector3(colPos,rowPos,0f),Quaternion.identity);
                 TileScript tileScript = tileInst.GetComponent<TileScript>();
                 tileScript.SetColor(colors[System.Convert.ToInt32(count++ % 2 == 0)]);
-                tileInst.transform.parent = transform;
+                tileInst.transform.SetParent(transform);
                 grid[row,col] = tileInst;
 
                 GameObject panelInst = GameObject.Instantiate(tilePanelPrefab, tilePanelPrefab.transform.position, Quaternion.identity);
-                panelInst.transform.parent = panelParent.transform;
+                panelInst.transform.SetParent(panelParent.transform);
                 RectTransform panelTransform = panelInst.GetComponent<RectTransform>();
                 panelTransform.localScale = Vector3.one;
                 panelTransform.anchoredPosition = new Vector3(64f * col, -64f * row);
