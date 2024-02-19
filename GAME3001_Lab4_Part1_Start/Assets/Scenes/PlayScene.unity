@@ -351,10 +351,10 @@ MonoBehaviour:
   tilePanelPrefab: {fileID: 7756494106398342664, guid: 8934e7c921a6bdc499e89f3cf8510bde, type: 3}
   panelParent: {fileID: 796889196}
   colors:
-  - {r: 0.0013654513, g: 0.9150943, b: 0, a: 0}
-  - {r: 0.70868355, g: 0.735849, b: 0.70461017, a: 0}
-  - {r: 0.5283019, g: 0.20878284, b: 0.102171585, a: 0}
-  useManhattanHeuristic: 1
+  - {r: 0.0013654513, g: 0.9150943, b: 0, a: 0.29411766}
+  - {r: 0.70868355, g: 0.735849, b: 0.70461017, a: 0.29411766}
+  - {r: 0.5283019, g: 0.20878284, b: 0.102171585, a: 0.29411766}
+  useManhattanHeuristic: 0
 --- !u!4 &571498480
 Transform:
   m_ObjectHideFlags: 0
