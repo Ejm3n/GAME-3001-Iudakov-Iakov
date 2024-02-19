@@ -187,7 +187,7 @@ public class GridManager : MonoBehaviour
                 }
                 float adjustedCost = distance * baseTileCost;
                 tileScript.cost = adjustedCost;
-                tileScript.tilePanel.costText.text = tileScript.cost.ToString("F1");
+                tileScript.tilePanel.costText.text = tileScript.cost.ToString();
             }
         }
     }
