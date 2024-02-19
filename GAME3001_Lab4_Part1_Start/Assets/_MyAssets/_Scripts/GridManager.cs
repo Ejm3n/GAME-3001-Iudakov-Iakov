@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -186,7 +187,7 @@ public class GridManager : MonoBehaviour
                     distance = Mathf.Sqrt(dx*dx + dy*dy);
                 }
                 float adjustedCost = distance * baseTileCost;
-                tileScript.cost = adjustedCost;
+                tileScript.cost = (float)Math.Round( adjustedCost,1);
                 tileScript.tilePanel.costText.text = tileScript.cost.ToString();
             }
         }
