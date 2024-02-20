@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ClickDragScript : MonoBehaviour
@@ -27,12 +26,10 @@ public class ClickDragScript : MonoBehaviour
                     isDragging = true;
                     currentlyDraggedObject = rb2d;
                     offset = rb2d.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    
-
-                    if(currentlyDraggedObject.gameObject.tag == "Mines" ||
-                        currentlyDraggedObject.gameObject.tag == "Ship"||
-                        currentlyDraggedObject.gameObject.tag == "Planet")
-                    {
+                    if (currentlyDraggedObject.gameObject.tag == "Mines" ||
+                        currentlyDraggedObject.gameObject.tag == "Ship"  ||
+                        currentlyDraggedObject.gameObject.tag == "Planet") 
+                    { 
                         Vector2 tileIndex = currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex();
                         GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.UNVISITED);
                     }
@@ -41,32 +38,28 @@ public class ClickDragScript : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            if (!isDragging)
-                return;
+            if (!isDragging) return; // Early-exit if.
             Vector2 tileIndex = currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex();
-            if(currentlyDraggedObject.gameObject.tag == "Mines")
-            {
-                GridManager.Instance.GetGrid()[(int)tileIndex.y,(int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
-
+            if (currentlyDraggedObject.gameObject.tag == "Mines") // We've released a mines tile.
+            { 
+                GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
             }
-            else if (currentlyDraggedObject.gameObject.tag == "Ship")
+            else if (currentlyDraggedObject.gameObject.tag == "Ship") // We've released a ship tile.
             {
                 GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
-
             }
-            else if (currentlyDraggedObject.gameObject.tag == "Planet")
+            else if (currentlyDraggedObject.gameObject.tag == "Planet") // We've released a planet tile.
             {
-                GridManager.Instance.SetTileCosts(currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex());
+                GridManager.Instance.SetTileCosts(currentlyDraggedObject.GetComponent<NavigationObject>().GetGridIndex());
                 GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
-                
-
             }
+            // Stop dragging.
             isDragging = false;
             currentlyDraggedObject = null;
         }
         if (isDragging && currentlyDraggedObject != null)
         {
-            if (!lockToGrid) // Note the new selection structure for lock to grid.
+            if (!lockToGrid)
             {
                 // Move the dragged GameObject normally based on the mouse position.
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -74,12 +67,11 @@ public class ClickDragScript : MonoBehaviour
             }
             else
             {
-                Vector2 gridPosition = GridManager.Instance.GetGridPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                // Move the dragged GameObject and lock it to a grid position.
+                Vector2 gridPosition = GridManager.Instance.GetGridPosition( Camera.main.ScreenToWorldPoint(Input.mousePosition) );
                 currentlyDraggedObject.MovePosition(gridPosition);
             }
-            // Uncomment the below line for Lab 4 part 1.
-            //
-             currentlyDraggedObject.GetComponent<NavigationObject>().SetGridIndex();
+            currentlyDraggedObject.GetComponent<NavigationObject>().SetGridIndex();
         }
     }
 }
