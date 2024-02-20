@@ -75,7 +75,7 @@ public class PathManager : MonoBehaviour
         path = new List<PathConnection>();
     }
 
-    public void GetShortestPath()
+    public void GetShortestPath(PathNode start, PathNode goal)
     {
 
     }
