@@ -16,7 +16,14 @@ public class TileScript : MonoBehaviour
     public void ResetNeighnourConnectios()
     {
         neighbourTiles = new GameObject[4];
-        Node.connections.Clear();
+        try
+        {
+            Node.connections.Clear();
+        }
+           catch
+        {
+
+        }
     }
 
     public void SetNeighbourTile(int index, GameObject tile)
