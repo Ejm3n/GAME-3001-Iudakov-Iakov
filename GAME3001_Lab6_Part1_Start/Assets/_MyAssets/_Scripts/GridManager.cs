@@ -115,7 +115,7 @@ public class GridManager : MonoBehaviour
     private void BuildGrid()
     {
         grid = new GameObject[rows, columns];
-        //int count = 0;
+        int count = 0;
         float rowPos = 5.5f;
         for (int row = 0; row < rows; row++, rowPos--)
         {
@@ -125,34 +125,36 @@ public class GridManager : MonoBehaviour
                 GameObject tileInst = GameObject.Instantiate(tilePrefab, new Vector3(colPos, rowPos, 0f), Quaternion.identity);
 
                 // TODO: Commented out for Lab 6a.
-                //TileScript tileScript = tileInst.GetComponent<TileScript>();
-                //tileScript.SetColor(colors[System.Convert.ToInt32((count++ % 2 == 0))]);
+                TileScript tileScript = tileInst.GetComponent<TileScript>();
+                tileScript.SetColor(colors[System.Convert.ToInt32((count++ % 2 == 0))]);
                 tileInst.transform.parent = transform;
-                grid[row,col] = tileInst;
-                // TODO: Commented out for Lab 6a.
-                // Instantiate a new TilePanel and link it to the Tile instance.
-                //GameObject panelInst = GameObject.Instantiate(tilePanelPrefab, tilePanelPrefab.transform.position, Quaternion.identity);
-                //panelInst.transform.SetParent(panelParent.transform);
-                //RectTransform panelTransform = panelInst.GetComponent<RectTransform>();
-                //panelTransform.localScale = Vector3.one;
-                //panelTransform.anchoredPosition = new Vector3(64f * col, -64f * row);
-                //tileScript.tilePanel = panelInst.GetComponent<TilePanelScript>();
-                // Create a new PathNode for the new tile.
-                //tileScript.Node = new PathNode(tileInst);
+                grid[row, col] = tileInst;
+            //TODO: Commented out for Lab 6a.
+
+            //Instantiate a new TilePanel and link it to the Tile instance.
+
+           GameObject panelInst = GameObject.Instantiate(tilePanelPrefab, tilePanelPrefab.transform.position, Quaternion.identity);
+           panelInst.transform.SetParent(panelParent.transform);
+           RectTransform panelTransform = panelInst.GetComponent<RectTransform>();
+                panelTransform.localScale = Vector3.one;
+                panelTransform.anchoredPosition = new Vector3(64f * col, -64f * row);
+                tileScript.tilePanel = panelInst.GetComponent<TilePanelScript>();
+               //Create a new PathNode for the new tile.
+               tileScript.Node = new PathNode(tileInst);
             }
             // TODO: Commented out for Lab 6a.
             //count--;
         }
         // TODO: Commented out for Lab 6a.
-        // Set the tile under the ship to Start.
-        //GameObject ship = GameObject.FindGameObjectWithTag("Ship");
-        //Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
-        //grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
-        // Set the tile under the player to Goal and set tile costs.
-        //GameObject planet = GameObject.FindGameObjectWithTag("Planet");
-        //Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
-        //grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
-        //SetTileCosts(planetIndices);
+        //Set the tile under the ship to Start.
+        GameObject ship = GameObject.FindGameObjectWithTag("Ship");
+        Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
+        grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
+        //Set the tile under the player to Goal and set tile costs.
+        GameObject planet = GameObject.FindGameObjectWithTag("Planet");
+        Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
+        grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
+        SetTileCosts(planetIndices);
     }
 
     // TODO: Comment out for Lab 6a. We don't need to connect grid for Lab 6.
