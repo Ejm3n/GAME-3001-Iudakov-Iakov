@@ -6,15 +6,16 @@ using UnityEngine;
 public class Starship : AgentObject
 {
     // TODO: Commented out for Lab 6a.
-     [SerializeField] float movementSpeed;
+    // [SerializeField] float movementSpeed;
     [SerializeField] float rotationSpeed;
     [SerializeField] float whiskerLength;
     [SerializeField] float whiskerAngle;
     // TODO: Commented out for Lab 6a.
     // [SerializeField] float avoidanceWeight;
     private Rigidbody2D rb;
-    // TODO: Add NavigationObject reference for Lab 6a.
     private NavigationObject no;
+    // TODO: Add NavigationObject reference for Lab 6a.
+    // 
 
     new void Start() // Note the new.
     {
@@ -28,8 +29,10 @@ public class Starship : AgentObject
 
     void Update()
     {
+        // TODO: Add new whisker and rotation behaviour for Lab 6a.
         bool hit = CastWhisker(whiskerAngle, Color.red);
-        transform.Rotate(0f, 0f, Input.GetAxis("Horizontal") * rotationSpeed * Time.deltaTime);
+
+        transform.Rotate(0f, 0f, Input.GetAxis("Horizontal")*rotationSpeed*Time.deltaTime);
 
         // TODO: Commented out for Lab 6a.
         //if (TargetPosition != null)
@@ -83,9 +86,9 @@ public class Starship : AgentObject
         Vector2 whiskerDirection = Quaternion.Euler(0, 0, angle) * transform.right;
 
         // TODO: Add for Lab 6a.
-        if (no.HasLOS(gameObject, "Planet", whiskerDirection,whiskerLength))
+      if(no.HasLOS(gameObject, "Planet", whiskerDirection, whiskerLength))
         {
-            Debug.Log("Obstacle detected");
+            Debug.Log("Obstacle Detected!");
             rayColor = Color.green;
             hitResult = true;
         }
@@ -96,30 +99,30 @@ public class Starship : AgentObject
     }
 
     // TODO: Comment out method for Lab 6a.
-  /*  private void SeekForward() // A seek with rotation to target but only moving along forward vector.
-    {
-        // Calculate direction to the target.
-        Vector2 directionToTarget = (TargetPosition - transform.position).normalized;
+    //private void SeekForward() // A seek with rotation to target but only moving along forward vector.
+    //{
+    //    // Calculate direction to the target.
+    //    Vector2 directionToTarget = (TargetPosition - transform.position).normalized;
 
-        // Calculate the angle to rotate towards the target.
-        float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg + 90.0f; // Note the +90 when converting from Radians.
+    //    // Calculate the angle to rotate towards the target.
+    //    float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg + 90.0f; // Note the +90 when converting from Radians.
 
-        // Smoothly rotate towards the target.
-        float angleDifference = Mathf.DeltaAngle(targetAngle, transform.eulerAngles.z);
-        float rotationStep = rotationSpeed * Time.deltaTime;
-        float rotationAmount = Mathf.Clamp(angleDifference, -rotationStep, rotationStep);
-        transform.Rotate(Vector3.forward, rotationAmount);
+    //    // Smoothly rotate towards the target.
+    //    float angleDifference = Mathf.DeltaAngle(targetAngle, transform.eulerAngles.z);
+    //    float rotationStep = rotationSpeed * Time.deltaTime;
+    //    float rotationAmount = Mathf.Clamp(angleDifference, -rotationStep, rotationStep);
+    //    transform.Rotate(Vector3.forward, rotationAmount);
 
-        // Move along the forward vector using Rigidbody2D.
-        rb.velocity = transform.up * movementSpeed;
-    }
+    //    // Move along the forward vector using Rigidbody2D.
+    //    rb.velocity = transform.up * movementSpeed;
+    //}
 
-    // TODO: Comment out method for Lab 6a.
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "Target")
-        {
-            GetComponent<AudioSource>().Play();
-        }
-    }*/
+    //// TODO: Comment out method for Lab 6a.
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (other.gameObject.tag == "Target")
+    //    {
+    //        GetComponent<AudioSource>().Play();
+    //    }
+    //}
 }

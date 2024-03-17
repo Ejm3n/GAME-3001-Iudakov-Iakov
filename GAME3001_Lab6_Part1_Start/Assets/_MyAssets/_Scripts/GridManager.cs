@@ -29,9 +29,11 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GameObject panelParent;
     [SerializeField] private GameObject minePrefab;
     [SerializeField] private Color[] colors;
-    [SerializeField] private float baseTileCost = 1f;
-    [SerializeField] private bool useManhattanHeuristic = true;
-    
+    //[SerializeField] private float baseTileCost = 1f;
+    //[SerializeField] private bool useManhattanHeuristic = true;
+
+    [SerializeField]private bool losToShip, losToTarget;
+
     private GameObject[,] grid;
     private int rows = 12;
     private int columns = 16;
@@ -93,29 +95,35 @@ public class GridManager : MonoBehaviour
             // TODO: Comment out for Lab 6a.
             //ConnectGrid();
         }
-        if (Input.GetKeyDown(KeyCode.F)) // Start pathfinding.
+
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            // Get ship node.
-            GameObject ship = GameObject.FindGameObjectWithTag("Ship");
-            Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
-            PathNode start = grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().Node;
-            // Get goal node.
-            GameObject planet = GameObject.FindGameObjectWithTag("Planet");
-            Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
-            PathNode goal = grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().Node;
-            // Start the algorithm.
-            PathManager.Instance.GetShortestPath(start, goal);
+            CheckTileLOS();
         }
-        if (Input.GetKeyDown(KeyCode.R)) // Reset grid/pathfinding.
-        {
-            SetTileStatuses();
-        }
+
+        //if (Input.GetKeyDown(KeyCode.F)) // Start pathfinding.
+        //{
+        //    // Get ship node.
+        //    GameObject ship = GameObject.FindGameObjectWithTag("Ship");
+        //    Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
+        //    PathNode start = grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().Node;
+        //    // Get goal node.
+        //    GameObject planet = GameObject.FindGameObjectWithTag("Planet");
+        //    Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
+        //    PathNode goal = grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().Node;
+        //    // Start the algorithm.
+        //    PathManager.Instance.GetShortestPath(start, goal);
+        //}
+        //if (Input.GetKeyDown(KeyCode.R)) // Reset grid/pathfinding.
+        //{
+        //    SetTileStatuses();
+        //}
     }
 
     private void BuildGrid()
     {
         grid = new GameObject[rows, columns];
-        int count = 0;
+        //int count = 0;
         float rowPos = 5.5f;
         for (int row = 0; row < rows; row++, rowPos--)
         {
@@ -125,88 +133,86 @@ public class GridManager : MonoBehaviour
                 GameObject tileInst = GameObject.Instantiate(tilePrefab, new Vector3(colPos, rowPos, 0f), Quaternion.identity);
 
                 // TODO: Commented out for Lab 6a.
-                TileScript tileScript = tileInst.GetComponent<TileScript>();
-                tileScript.SetColor(colors[System.Convert.ToInt32((count++ % 2 == 0))]);
+                //TileScript tileScript = tileInst.GetComponent<TileScript>();
+                //tileScript.SetColor(colors[System.Convert.ToInt32((count++ % 2 == 0))]);
                 tileInst.transform.parent = transform;
-                grid[row, col] = tileInst;
-            //TODO: Commented out for Lab 6a.
-
-            //Instantiate a new TilePanel and link it to the Tile instance.
-
-           GameObject panelInst = GameObject.Instantiate(tilePanelPrefab, tilePanelPrefab.transform.position, Quaternion.identity);
-           panelInst.transform.SetParent(panelParent.transform);
-           RectTransform panelTransform = panelInst.GetComponent<RectTransform>();
-                panelTransform.localScale = Vector3.one;
-                panelTransform.anchoredPosition = new Vector3(64f * col, -64f * row);
-                tileScript.tilePanel = panelInst.GetComponent<TilePanelScript>();
-               //Create a new PathNode for the new tile.
-               tileScript.Node = new PathNode(tileInst);
+                grid[row,col] = tileInst;
+                // TODO: Commented out for Lab 6a.
+                // Instantiate a new TilePanel and link it to the Tile instance.
+                //GameObject panelInst = GameObject.Instantiate(tilePanelPrefab, tilePanelPrefab.transform.position, Quaternion.identity);
+                //panelInst.transform.SetParent(panelParent.transform);
+                //RectTransform panelTransform = panelInst.GetComponent<RectTransform>();
+                //panelTransform.localScale = Vector3.one;
+                //panelTransform.anchoredPosition = new Vector3(64f * col, -64f * row);
+                //tileScript.tilePanel = panelInst.GetComponent<TilePanelScript>();
+                // Create a new PathNode for the new tile.
+                //tileScript.Node = new PathNode(tileInst);
             }
             // TODO: Commented out for Lab 6a.
             //count--;
         }
         // TODO: Commented out for Lab 6a.
-        //Set the tile under the ship to Start.
-        GameObject ship = GameObject.FindGameObjectWithTag("Ship");
-        Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
-        grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
-        //Set the tile under the player to Goal and set tile costs.
-        GameObject planet = GameObject.FindGameObjectWithTag("Planet");
-        Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
-        grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
-        SetTileCosts(planetIndices);
+        // Set the tile under the ship to Start.
+        //GameObject ship = GameObject.FindGameObjectWithTag("Ship");
+        //Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
+        //grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
+        // Set the tile under the player to Goal and set tile costs.
+        //GameObject planet = GameObject.FindGameObjectWithTag("Planet");
+        //Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
+        //grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
+        //SetTileCosts(planetIndices);
     }
 
     // TODO: Comment out for Lab 6a. We don't need to connect grid for Lab 6.
-  /*  public void ConnectGrid() // TODO: Made public for Lab 5. Also lots of changes within.
-    {
-        for (int row = 0; row < rows; row++)
-        {
-            for (int col = 0; col < columns; col++)
-            {
-                TileScript tileScript = grid[row, col].GetComponent<TileScript>();
-                tileScript.ResetNeighbourConnections(); // TODO: New for Lab 5.
-                if (tileScript.status == TileStatus.IMPASSABLE) continue;
-                if (row > 0) // Set top neighbour if tile is not in top row.
-                {
-                    if (!(grid[row - 1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
-                    {
-                        tileScript.SetNeighbourTile((int)NeighbourTile.TOP_TILE, grid[row - 1, col]);
-                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row - 1, col].GetComponent<TileScript>().Node,
-                            Vector3.Distance(tileScript.transform.position, grid[row - 1, col].transform.position)));
-                    }
-                }
-                if (col < columns - 1) // Set right neighbour if tile is not in rightmost row.
-                {
-                    if (!(grid[row, col + 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
-                    {
-                        tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, col + 1]);
-                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col + 1].GetComponent<TileScript>().Node,
-                            Vector3.Distance(tileScript.transform.position, grid[row, col + 1].transform.position)));
-                    }
-                }
-                if (row < rows - 1) // Set bottom neighbour if tile is not in bottom row.
-                {
-                    if (!(grid[row + 1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
-                    {
-                        tileScript.SetNeighbourTile((int)NeighbourTile.BOTTOM_TILE, grid[row + 1, col]);
-                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row + 1, col].GetComponent<TileScript>().Node,
-                             Vector3.Distance(tileScript.transform.position, grid[row + 1, col].transform.position)));
-                    }
-                }
-                if (col > 0) // Set left neighbour if tile is not in leftmost row.
-                {
-                    if (!(grid[row, col - 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
-                    {
-                        tileScript.SetNeighbourTile((int)NeighbourTile.LEFT_TILE, grid[row, col - 1]);
-                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col - 1].GetComponent<TileScript>().Node,
-                            Vector3.Distance(tileScript.transform.position, grid[row, col - 1].transform.position)));
-                    }
-                }
-            }
-        }
-    }*/
-    // Comment out to here.
+    //public void ConnectGrid() // TODO: Made public for Lab 5. Also lots of changes within.
+    //{
+    //    for (int row = 0; row < rows; row++)
+    //    {
+    //        for (int col = 0; col < columns; col++)
+    //        {
+    //            TileScript tileScript = grid[row, col].GetComponent<TileScript>();
+    //            tileScript.ResetNeighbourConnections(); // TODO: New for Lab 5.
+    //            if (tileScript.status == TileStatus.IMPASSABLE) continue;
+    //            if (row > 0) // Set top neighbour if tile is not in top row.
+    //            {
+    //                if (!(grid[row - 1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+    //                {
+    //                    tileScript.SetNeighbourTile((int)NeighbourTile.TOP_TILE, grid[row - 1, col]);
+    //                    tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row - 1, col].GetComponent<TileScript>().Node,
+    //                        Vector3.Distance(tileScript.transform.position, grid[row - 1, col].transform.position)));
+    //                }
+    //            }
+    //            if (col < columns - 1) // Set right neighbour if tile is not in rightmost row.
+    //            {
+    //                if (!(grid[row, col + 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+    //                {
+    //                    tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, col + 1]);
+    //                    tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col + 1].GetComponent<TileScript>().Node,
+    //                        Vector3.Distance(tileScript.transform.position, grid[row, col + 1].transform.position)));
+    //                }
+    //            }
+    //            if (row < rows - 1) // Set bottom neighbour if tile is not in bottom row.
+    //            {
+    //                if (!(grid[row + 1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+    //                {
+    //                    tileScript.SetNeighbourTile((int)NeighbourTile.BOTTOM_TILE, grid[row + 1, col]);
+    //                    tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row + 1, col].GetComponent<TileScript>().Node,
+    //                         Vector3.Distance(tileScript.transform.position, grid[row + 1, col].transform.position)));
+    //                }
+    //            }
+    //            if (col > 0) // Set left neighbour if tile is not in leftmost row.
+    //            {
+    //                if (!(grid[row, col - 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+    //                {
+    //                    tileScript.SetNeighbourTile((int)NeighbourTile.LEFT_TILE, grid[row, col - 1]);
+    //                    tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col - 1].GetComponent<TileScript>().Node,
+    //                        Vector3.Distance(tileScript.transform.position, grid[row, col - 1].transform.position)));
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    //// Comment out to here.
 
     public GameObject[,] GetGrid()
     {
@@ -219,35 +225,35 @@ public class GridManager : MonoBehaviour
         return new Vector2(xPos, yPos);
     }
 
-    public void SetTileCosts(Vector2 targetIndices)
-    {
-        float distance = 0f;
-        float dx = 0f;
-        float dy = 0f;
+    //public void SetTileCosts(Vector2 targetIndices)
+    //{
+    //    float distance = 0f;
+    //    float dx = 0f;
+    //    float dy = 0f;
 
-        for (int row = 0; row < rows; row++)
-        {
-            for (int col = 0; col < columns; col++)
-            {
-                TileScript tileScript = grid[row, col].GetComponent<TileScript>();
-                if (useManhattanHeuristic)
-                {
-                    dx = Mathf.Abs(col - targetIndices.x);
-                    dy = Mathf.Abs(row - targetIndices.y);
-                    distance = dx + dy;
-                }
-                else // Euclidean.
-                {
-                    dx = targetIndices.x - col;
-                    dy = targetIndices.y - row;
-                    distance = Mathf.Sqrt(dx * dx + dy * dy);
-                }
-                float adjustedCost = distance * baseTileCost;
-                tileScript.cost = adjustedCost;
-                tileScript.tilePanel.costText.text = tileScript.cost.ToString("F1");
-            }
-        }
-    }
+    //    for (int row = 0; row < rows; row++)
+    //    {
+    //        for (int col = 0; col < columns; col++)
+    //        {
+    //            TileScript tileScript = grid[row, col].GetComponent<TileScript>();
+    //            if (useManhattanHeuristic)
+    //            {
+    //                dx = Mathf.Abs(col - targetIndices.x);
+    //                dy = Mathf.Abs(row - targetIndices.y);
+    //                distance = dx + dy;
+    //            }
+    //            else // Euclidean.
+    //            {
+    //                dx = targetIndices.x - col;
+    //                dy = targetIndices.y - row;
+    //                distance = Mathf.Sqrt(dx * dx + dy * dy);
+    //            }
+    //            float adjustedCost = distance * baseTileCost;
+    //            tileScript.cost = adjustedCost;
+    //            tileScript.tilePanel.costText.text = tileScript.cost.ToString("F1");
+    //        }
+    //    }
+    //}
 
     public void SetTileStatuses()
     {
@@ -268,5 +274,78 @@ public class GridManager : MonoBehaviour
         GameObject planet = GameObject.FindGameObjectWithTag("Planet");
         Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
         grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
+    }
+
+    public void CheckTileLOS()
+    {
+        if(!losToShip && !losToTarget)
+        {
+            foreach(GameObject go in grid)
+            {
+                if (go == null) continue;
+                go.GetComponent<SpriteRenderer>().color = Color.cyan;
+            }
+        }
+        else
+        {
+            GameObject player = GameObject.FindWithTag("Ship");
+            Vector3 shipPos = player.transform.position;
+            GameObject planet = GameObject.FindWithTag("Planet");
+            Vector3 planetPos = planet.transform.position;
+
+            foreach (GameObject go in grid)
+            {
+                if (go == null) continue;
+                Vector3 tilePos = go.transform.position;
+                bool hasLosToShip = false;
+
+                if (losToShip)
+                {
+                    Vector2 direction = (shipPos - tilePos).normalized;
+                    hasLosToShip = go.GetComponent<NavigationObject>().HasLOS(go, "Ship", direction, Vector3.Distance(tilePos, shipPos));
+                }
+
+                bool hasLosToTarget = false;
+                if (losToTarget)
+                {
+                    Vector2 direction = (planetPos - tilePos).normalized;
+                    hasLosToTarget = go.GetComponent<NavigationObject>().HasLOS(go, "Planet", direction, Vector3.Distance(tilePos, planetPos));
+                }
+
+                if(losToShip && losToTarget)
+                {
+                    if (hasLosToShip && hasLosToTarget)
+                    {
+                        go.GetComponent<SpriteRenderer>().color = Color.green;
+                    }
+                    else
+                    {
+                        go.GetComponent<SpriteRenderer>().color = Color.red;
+                    }
+                }
+                else if (losToShip)
+                {
+                    if (hasLosToShip)
+                    {
+                        go.GetComponent<SpriteRenderer>().color = Color.green;
+                    }
+
+                    else
+                    {
+                        go.GetComponent<SpriteRenderer>().color = Color.red;
+                    }
+                }
+                else if (losToTarget)
+                {
+                    if (hasLosToTarget)
+                    {
+                        go.GetComponent<SpriteRenderer>().color = Color.green;
+                    }
+
+                    else
+                    { go.GetComponent<SpriteRenderer>().color = Color.red; }
+                }
+            }
+        }
     }
 }
